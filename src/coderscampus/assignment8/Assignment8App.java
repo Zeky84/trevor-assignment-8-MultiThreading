@@ -7,13 +7,12 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 public class Assignment8App {
     public static void main(String[] args){
         Assignment8 multiThreadEx = new Assignment8();
 
-        ExecutorService parseNumExecutor = Executors.newFixedThreadPool(8);
+        ExecutorService fetchNumExecutor = Executors.newFixedThreadPool(8);
         ExecutorService addNumExecutor = Executors.newSingleThreadExecutor();
 
         List<CompletableFuture<Void>> tasks = new ArrayList<>();
@@ -21,7 +20,7 @@ public class Assignment8App {
         List<Integer> totalOfNums = new ArrayList<>() ;
 
         for (int i=0; i<1000; i++) {
-            CompletableFuture<Void> task = CompletableFuture.supplyAsync(()->multiThreadEx.getNumbers(),parseNumExecutor)
+            CompletableFuture<Void> task = CompletableFuture.supplyAsync(()->multiThreadEx.getNumbers(),fetchNumExecutor)
                                                             .thenAcceptAsync(numbersK->totalOfNums.addAll(numbersK),addNumExecutor);
             tasks.add(task);
         }
@@ -40,7 +39,7 @@ public class Assignment8App {
             else{numTimesAppear.put(number,1);}
         }
         System.out.println("Counting the times a number appear: ");
-        System.out.print(numTimesAppear.toString());
+        System.out.print(numTimesAppear);
     }
 
 
